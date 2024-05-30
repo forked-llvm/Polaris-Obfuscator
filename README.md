@@ -13,6 +13,7 @@ Compared with the OLLVM framework, this framework not only provides obfuscation 
 - **Indirect Branch**: Using registers for indirect jumps to other basic blocks.
 - **Indirect Call**:  Using registers for indirect function calls.
 - **String Encryption**: Encrypt global constants in the program and decrypt them within functions that use these constants.(instead of .ctor)
+- **Bogus Control Flow**： Bogus Control Flow (using local variables)
 
 ### 0x2 MIR Level
 
@@ -104,6 +105,7 @@ here are some supported pass's names:
 - **indcall**: enable indirect call obfuscation
 - **indbr**: enable indirect branch obfuscation
 - **alias**: enable alias access obfuscation
+- **bcf**: enable bogus control flow obfuscation
 
 Enabling multiple obfuscation passes is supported,  you should separate pass names with commas.
 
@@ -123,6 +125,7 @@ After enabling the pass, you need to mark functions in your source as follows to
 - indirectbr for indbr
 - flattening for fla
 - aliasaccess for alias
+- boguscfg for bcf
 
 ```c
 int __attribute((__annotate__(("indirectcall,indirectbr,aliasaccess")))) main() {

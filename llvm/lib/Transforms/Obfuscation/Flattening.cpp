@@ -274,29 +274,7 @@ void Flattening::doFlatten(Function *f, int seed, Function *updateFunc) {
     } else
       continue;
   }
-  std::vector<PHINode *> tmpPhi;
-  std::vector<Instruction *> tmpReg;
-  BasicBlock *bbEntry = &*f->begin();
-  tmpPhi.clear();
-  tmpReg.clear();
-  for (Function::iterator i = f->begin(); i != f->end(); i++) {
-    for (BasicBlock::iterator j = i->begin(); j != i->end(); j++) {
-      if (isa<PHINode>(j)) {
-        PHINode *phi = cast<PHINode>(j);
-        tmpPhi.push_back(phi);
-        continue;
-      }
-      if (!(isa<AllocaInst>(j) && j->getParent() == bbEntry) &&
-          j->isUsedOutsideOfBlock(&*i)) {
-        tmpReg.push_back(&*j);
-        continue;
-      }
-    }
-  }
-  for (unsigned int i = 0; i < tmpReg.size(); i++)
-    DemoteRegToStack(*tmpReg.at(i), f->begin()->getTerminator());
-  for (unsigned int i = 0; i < tmpPhi.size(); i++)
-    DemotePHIToStack(tmpPhi.at(i), f->begin()->getTerminator());
+  demoteRegisters(f);
 }
 
 PreservedAnalyses Flattening::run(Module &M, ModuleAnalysisManager &AM) {
